@@ -1,0 +1,107 @@
+{% extends 'layout.html.twig' %}
+
+{% block body %}
+<div class="row">
+      <legend>Basic Info</legend>
+      <form action="{{ path('updateUser') }}" method="post">
+        <div class="form-group">
+          <label for="exampleInput1">Name</label>
+          <input type="text" class="form-control" id="exampleInput1" placeholder="Enter name" value="{{ userName }}" name="username">
+        </div>
+        <div class="form-group">
+          <label for="exampleInput2">Address</label>
+          <input type="text" class="form-control" id="exampleInput2" placeholder="Enter address" value="{{ userAddress }}" name="address">
+        </div>
+        <div class="form-group">
+          <label for="exampleInput3">City</label>
+          <input type="text" class="form-control" id="exampleInput3" placeholder="Enter city" value="{{ userCity }}" name="city">
+        </div>
+        <div class="form-group">
+          <label for="exampleInput4">Country</label>
+          <input type="text" class="form-control" id="exampleInput4" placeholder="Enter country" value="{{ userCountry }}" name="country">
+        </div>
+        <button type="submit" class="btn btn-default" name="submit">Save</button>
+      </form>
+  </div>
+  <hr>
+  <div class="row">
+    <legend>Passengers</legend>
+    <table class="table table-bordered">
+      <thead>
+        <tr>
+          <th>Title</th>
+          <th>First Name</th>
+          <th>Surname</th>
+          <th>Passport ID</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% if(passengers) %}
+            {% for passenger in passengers %}
+            <tr>
+              <td>{{ passenger.title }}</td>
+              <td>{{ passenger.firstname }}</td>
+              <td>{{ passenger.surname }}</td>
+              <td>{{ passenger.passportid }}</td>
+              <td><a href="{{ path('deletePassenger', {'id': passenger.id }) }}" class="btn btn-default">Remove</a></td>
+            </tr>
+            {% endfor %}
+        {% else %}
+            <tr>
+              <td colspan="5"> No data!</td>
+            </tr>
+        {% endif %}
+        <tr>
+          <td colspan="5" class="text-right">
+          <a href="{{ path('deleteAllPassenger') }}" class="btn btn-default"><b class=""> - </b>RemoveAll</a>
+          <a href="{{ path('addPassengerPage') }}" class="btn btn-default"><b class="">+</b> Add</a>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  
+  <div class="row">
+    <legend>Trips</legend>
+    <table class="table table-bordered">
+      <thead>
+        <tr>
+          <th>From</th>
+          <th>To</th>
+          <th>Departure</th>
+          <th>Arrival</th>
+          <th>Passengers</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% if(trips) %}
+            {% dump(trips) %}
+          {% for trip in trips %}
+            <tr>
+                <td>{{trip.tripFrom}}</td>
+                <td>{{trip.tripTo}}</td>
+                <td>{{trip.departure}}</td>
+                <td>{{trip.arrival}}</td>
+                <td>
+                    {% for key, val in trip.passengerIds %}
+                          {{ key|replace({"'": ""}) }} {% if loop.last == false %} , {% endif %}
+                    {% endfor %}
+                </td>
+                <td><a href="{{ path('deleteTrip', {'id': trip.id }) }}" class="btn btn-default">Remove</a></td>
+            </tr>
+          {% endfor %}
+        {% else %}
+            <tr>
+              <td colspan="5"> No data!</td>
+            </tr>
+        {% endif %}
+      
+        <tr>
+          <td colspan="6" class="text-right"><a href="{{ path('addTripPage') }}" class="btn btn-default"><b class="">+</b> Add</a></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+{% endblock %}
